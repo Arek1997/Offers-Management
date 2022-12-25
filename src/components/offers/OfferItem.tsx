@@ -11,21 +11,29 @@ import {
 	Button,
 } from '@mantine/core';
 
+import { useToggle } from '@mantine/hooks';
+
 import { IconCopy, IconCheck, IconSettings, IconTrash } from '@tabler/icons';
 
 interface OfferListProps {
+	id: string;
 	title: string;
 	text: string;
 }
 
 const OfferItem: React.FC<OfferListProps> = (props) => {
+	const [value, toggle] = useToggle([5, 0] as const);
+
+	const showAllTextHandler = () => toggle();
+
 	return (
 		<Card
 			shadow='sm'
 			p='lg'
 			radius='md'
 			withBorder
-			className='max-w-[320px] overflow-auto bg-transparent dark:bg-indigo-200 border-transparent  dark:border-indigo-200'
+			id={props.id}
+			className='min-w-full min-h-[235px] sm:min-w-[auto] sm:w-[320px] overflow-auto bg-transparent dark:bg-indigo-200 border-transparent  dark:border-indigo-200'
 		>
 			<Group position='right' className='mb-3'>
 				<Menu shadow='md' width={200}>
@@ -47,7 +55,7 @@ const OfferItem: React.FC<OfferListProps> = (props) => {
 				<CopyButton value={props.text} timeout={2000}>
 					{({ copied, copy }) => (
 						<Tooltip
-							label={copied ? 'Copied' : 'Copy'}
+							label={copied ? 'Text copied' : 'Copy text'}
 							withArrow
 							position='right'
 						>
@@ -62,7 +70,13 @@ const OfferItem: React.FC<OfferListProps> = (props) => {
 				{props.title}
 			</Text>
 
-			<Text size='sm' color='dimmed' lineClamp={5} className='text-slate-800'>
+			<Text
+				size='sm'
+				color='dimmed'
+				lineClamp={value}
+				className='text-slate-800 cursor-pointer'
+				onClick={showAllTextHandler}
+			>
 				{props.text}
 			</Text>
 		</Card>

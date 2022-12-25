@@ -30,6 +30,7 @@ const ModalForm: React.FC = () => {
 	const onSubmitHandler = (offer: OfferInterface) => {
 		offerCtx.addOffer(offer);
 		form.reset();
+		modalCtx.toggleModal();
 	};
 
 	return (
@@ -53,8 +54,8 @@ const ModalForm: React.FC = () => {
 						/>
 
 						<Textarea
-							placeholder='Enter offer message'
 							label='Offer message'
+							placeholder='Enter offer message'
 							autosize
 							minRows={2}
 							className='mb-5'
