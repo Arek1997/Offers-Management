@@ -10,15 +10,20 @@ const ModalForm: React.FC = () => {
 	const modalCtx = useContext(ModalContext);
 	const offerCtx = useContext(OfferContext);
 
+	const initialValues = {
+		title: modalCtx.edit ? modalCtx.editableItem.title : '',
+		text: modalCtx.edit ? modalCtx.editableItem.text : '',
+	};
+
 	const form = useForm({
-		initialValues: { title: '', text: '' },
+		initialValues: { ...initialValues },
 
 		validate: {
 			title: (value) =>
-				value.length < 2 ? 'Title must have at least 2 letters' : null,
+				value!.length < 2 ? 'Title must have at least 2 letters' : null,
 
 			text: (value) =>
-				value.length < 2 ? 'Message must have at least 10 letters' : null,
+				value!.length < 10 ? 'Message must have at least 10 letters' : null,
 		},
 	});
 
@@ -28,9 +33,14 @@ const ModalForm: React.FC = () => {
 	}, [modalCtx.opened]);
 
 	const onSubmitHandler = (offer: OfferInterface) => {
-		offerCtx.addOffer(offer);
+		if (modalCtx.edit) {
+			offerCtx.editOffer(modalCtx.editableItem.id!, offer);
+		} else {
+			offerCtx.addOffer(offer);
+		}
+
 		form.reset();
-		modalCtx.toggleModal();
+		modalCtx.toggleModal(false);
 	};
 
 	return (
@@ -38,8 +48,8 @@ const ModalForm: React.FC = () => {
 			<Modal
 				size='lg'
 				opened={modalCtx.opened}
-				onClose={modalCtx.toggleModal}
-				title='Add your new offer'
+				onClose={modalCtx.toggleModal.bind(null, false)}
+				title={modalCtx.edit ? 'Edit your offer' : 'Add your new offer'}
 				overlayBlur={2}
 				transition='fade'
 				transitionDuration={500}
@@ -48,14 +58,18 @@ const ModalForm: React.FC = () => {
 					<form onSubmit={form.onSubmit((values) => onSubmitHandler(values))}>
 						<TextInput
 							label='Offer title'
-							placeholder='Enter offer title'
+							placeholder={
+								modalCtx.edit ? 'Edit offer title' : 'Enter offer title'
+							}
 							className='mb-5'
 							{...form.getInputProps('title')}
 						/>
 
 						<Textarea
 							label='Offer message'
-							placeholder='Enter offer message'
+							placeholder={
+								modalCtx.edit ? 'Edit offer message' : 'Enter offer message'
+							}
 							autosize
 							minRows={2}
 							className='mb-5'
@@ -63,7 +77,7 @@ const ModalForm: React.FC = () => {
 						/>
 
 						<Button type='submit' className='block ml-auto bg-indigo-400'>
-							Add
+							{modalCtx.edit ? 'Apply changes' : 'Add'}
 						</Button>
 					</form>
 				</div>

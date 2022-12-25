@@ -1,4 +1,5 @@
 export interface OfferInterface {
-	title: string;
-	text: string;
+	id?: string;
+	title?: string;
+	text?: string;
 }

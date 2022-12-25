@@ -11,8 +11,8 @@ const OfferList: React.FC = (props) => {
 			<div className='container md:px-8 flex gap-8 flex-wrap justify-center sm:justify-start items-center'>
 				{offerCtx.offersArr.map((offer) => (
 					<OfferItem
-						key={crypto.randomUUID()}
-						id={crypto.randomUUID()}
+						key={offer.id}
+						id={offer.id}
 						title={offer.title}
 						text={offer.text}
 					/>

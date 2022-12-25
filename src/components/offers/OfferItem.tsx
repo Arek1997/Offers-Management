@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import {
 	Card,
@@ -15,16 +15,22 @@ import { useToggle } from '@mantine/hooks';
 
 import { IconCopy, IconCheck, IconSettings, IconTrash } from '@tabler/icons';
 
-interface OfferListProps {
-	id: string;
-	title: string;
-	text: string;
-}
+import { OfferInterface } from '../../interface/OfferInterface';
 
-const OfferItem: React.FC<OfferListProps> = (props) => {
+import { ModalContext } from '../../context/ModalContext';
+
+const OfferItem: React.FC<OfferInterface> = (props) => {
+	const modalCtx = useContext(ModalContext);
+
 	const [value, toggle] = useToggle([5, 0] as const);
 
 	const showAllTextHandler = () => toggle();
+
+	const itemData: OfferInterface = {
+		id: props.id,
+		title: props.title,
+		text: props.text,
+	};
 
 	return (
 		<Card
@@ -42,7 +48,12 @@ const OfferItem: React.FC<OfferListProps> = (props) => {
 					</Menu.Target>
 
 					<Menu.Dropdown>
-						<Menu.Item icon={<IconSettings size={14} />}>Edit</Menu.Item>
+						<Menu.Item
+							icon={<IconSettings size={14} />}
+							onClick={modalCtx.toggleModal.bind(null, true, itemData)}
+						>
+							Edit
+						</Menu.Item>
 
 						<Menu.Divider />
 
@@ -52,7 +63,7 @@ const OfferItem: React.FC<OfferListProps> = (props) => {
 					</Menu.Dropdown>
 				</Menu>
 
-				<CopyButton value={props.text} timeout={2000}>
+				<CopyButton value={props.text!} timeout={2000}>
 					{({ copied, copy }) => (
 						<Tooltip
 							label={copied ? 'Text copied' : 'Copy text'}
@@ -74,7 +85,7 @@ const OfferItem: React.FC<OfferListProps> = (props) => {
 				size='sm'
 				color='dimmed'
 				lineClamp={value}
-				className='text-slate-800 cursor-pointer'
+				className='text-slate-800 cursor-pointer break-words'
 				onClick={showAllTextHandler}
 			>
 				{props.text}

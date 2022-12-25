@@ -43,7 +43,7 @@ const TopBar: React.FC = () => {
 					color='indigo'
 					uppercase
 					className='bg-indigo-500'
-					onClick={modalCtx.toggleModal}
+					onClick={modalCtx.toggleModal.bind(null, false, undefined)}
 				>
 					Add new offer
 				</Button>
