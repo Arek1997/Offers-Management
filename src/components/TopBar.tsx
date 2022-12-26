@@ -6,16 +6,23 @@ import {
 	Group,
 	useMantineTheme,
 } from '@mantine/core';
-import { useLocalStorage } from '@mantine/hooks';
-import { IconSun, IconMoon, IconSearch } from '@tabler/icons';
+import { useLocalStorage, useDebouncedState } from '@mantine/hooks';
+import { IconSun, IconMoon } from '@tabler/icons';
 
 import { ModalContext } from '../context/ModalContext';
+import { OfferContext } from '../context/OfferContext';
 
 const TopBar: React.FC = () => {
 	const [darkMode, setDarkMode] = useLocalStorage({
 		key: 'dark-mode',
 		defaultValue: 'dark',
 	});
+	const modalCtx = useContext(ModalContext);
+	const offerCtx = useContext(OfferContext);
+
+	const [value, setValue] = useDebouncedState(offerCtx.filterValue, 200);
+
+	const theme = useMantineTheme();
 
 	useEffect(() => {
 		if (darkMode === 'dark') {
@@ -25,9 +32,13 @@ const TopBar: React.FC = () => {
 		}
 	}, [darkMode]);
 
-	const modalCtx = useContext(ModalContext);
+	const filterOffersHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setValue(e.currentTarget.value);
+	};
 
-	const theme = useMantineTheme();
+	useEffect(() => {
+		offerCtx.setFilterValue(value);
+	}, [value]);
 
 	return (
 		<div className='container md:px-8 pt-6 2xl:pt-10 flex flex-col sm:flex-row justify-between'>
@@ -35,7 +46,7 @@ const TopBar: React.FC = () => {
 				<TextInput
 					type='search'
 					placeholder='Enter search offer'
-					rightSection={<IconSearch className='cursor-pointer' />}
+					onChange={filterOffersHandler}
 				/>
 			</div>
 			<div className='action-buttons flex gap-5'>

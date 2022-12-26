@@ -18,13 +18,21 @@ import { IconCopy, IconCheck, IconSettings, IconTrash } from '@tabler/icons';
 import { OfferInterface } from '../../interface/OfferInterface';
 
 import { ModalContext } from '../../context/ModalContext';
+import { OfferContext } from '../../context/OfferContext';
+import { ConfirmContext } from '../../context/ConfirmContext';
 
 const OfferItem: React.FC<OfferInterface> = (props) => {
 	const modalCtx = useContext(ModalContext);
+	const offerCtx = useContext(OfferContext);
+	const confirmCtx = useContext(ConfirmContext);
 
 	const [value, toggle] = useToggle([5, 0] as const);
 
 	const showAllTextHandler = () => toggle();
+
+	const deleteOfferHandler = () => {
+		confirmCtx.toggleModal();
+	};
 
 	const itemData: OfferInterface = {
 		id: props.id,
@@ -57,7 +65,11 @@ const OfferItem: React.FC<OfferInterface> = (props) => {
 
 						<Menu.Divider />
 
-						<Menu.Item color='red' icon={<IconTrash size={14} />}>
+						<Menu.Item
+							color='red'
+							icon={<IconTrash size={14} />}
+							onClick={deleteOfferHandler}
+						>
 							Delete offer
 						</Menu.Item>
 					</Menu.Dropdown>

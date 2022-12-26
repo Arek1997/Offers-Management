@@ -5,12 +5,15 @@ import './index.css';
 
 import ModalContextProvider from './context/ModalContext';
 import OfferContextProvider from './context/OfferContext';
+import ConfirmContextProvider from './context/ConfirmContext';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
 		<ModalContextProvider>
 			<OfferContextProvider>
-				<App />
+				<ConfirmContextProvider>
+					<App />
+				</ConfirmContextProvider>
 			</OfferContextProvider>
 		</ModalContextProvider>
 	</React.StrictMode>

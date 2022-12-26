@@ -2,32 +2,46 @@ import { useState, createContext } from 'react';
 
 import { OfferInterface } from '../interface/OfferInterface';
 
-const defaultValue = {
+const defaultValue: defaultValueInterface = {
 	offersArr: [
 		{
 			id: 'offer-1',
-			title: 'Oferta do formy xyz',
-			text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nemo tenetur sint possimus soluta nihil nisi iste esse ipsam, similique, repudiandae qui distinctio dolor quam porro, minus rerum facilis voluptas architecto.',
+			title: 'Demo offer 1',
+			text: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minus, similique numquam molestias velit tenetur quisquam tempore maxime eveniet quos neque!',
 		},
 
 		{
 			id: 'offer-2',
-			title: 'Oferta do formy xyz',
+			title: 'Demo offer 2',
 			text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nemo tenetur sint possimus soluta nihil nisi iste esse ipsam, similique, repudiandae qui distinctio dolor quam porro, minus rerum facilis voluptas architecto.',
 		},
 
 		{
 			id: 'offer-3',
-			title: 'Oferta do formy xyz',
-			text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nemo tenetur sint possimus soluta nihil nisi iste esse ipsam, similique, repudiandae qui distinctio dolor quam porro, minus rerum facilis voluptas architecto.',
+			title: 'Demo offer 3',
+			text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quam asperiores explicabo illum quae, numquam aut sed obcaecati quibusdam neque consequuntur soluta aliquam provident eius officiis fuga aperiam repellat reiciendis earum vel pariatur adipisci at accusantium incidunt! Quisquam tempora sunt optio autem. Dolore quae voluptatum pariatur voluptatibus ducimus dolores nostrum cupiditate exercitationem rem minima commodi hic maiores atque, amet, autem odio!',
 		},
-	] as OfferInterface[],
+	],
 
 	addOffer: (newOffer: OfferInterface) => {},
 	editOffer: (id: string, data: OfferInterface) => {},
+	deleteOffer: (id: string) => {},
+	filterOffers: (dataToFilter: OfferInterface[]) => [],
+	filterValue: '',
+	setFilterValue: (value: string) => {},
 };
 
 export const OfferContext = createContext(defaultValue);
+
+interface defaultValueInterface {
+	offersArr: OfferInterface[];
+	addOffer: (newOffer: OfferInterface) => void;
+	editOffer: (id: string, data: OfferInterface) => void;
+	deleteOffer: (id: string) => void;
+	filterOffers: (dataToFilter: OfferInterface[]) => OfferInterface[];
+	filterValue: string;
+	setFilterValue: (value: string) => void;
+}
 
 interface OfferContextProviderProps {
 	children: React.ReactNode;
@@ -35,6 +49,9 @@ interface OfferContextProviderProps {
 
 const OfferContextProvider: React.FC<OfferContextProviderProps> = (props) => {
 	const [offersArr, setOffersArr] = useState(defaultValue.offersArr);
+	const [filterValue, setFilterValue] = useState(defaultValue.filterValue);
+
+	const setFilterValueHandler = (value: string) => setFilterValue(value);
 
 	const addOfferHandler = (newOffer: OfferInterface) => {
 		const newOfferWithId = {
@@ -55,10 +72,24 @@ const OfferContextProvider: React.FC<OfferContextProviderProps> = (props) => {
 		setOffersArr(newState);
 	};
 
+	const deleteOfferHandler = (id: string) => {
+		const updatedState = offersArr.filter((offer) => offer.id !== id);
+		setOffersArr(updatedState);
+	};
+
+	const filterOffersHandler = (dataToFilter: OfferInterface[]) =>
+		dataToFilter.filter((data) =>
+			data.title?.toLocaleLowerCase().includes(filterValue.toLocaleLowerCase())
+		);
+
 	const providerValue = {
 		offersArr,
 		addOffer: addOfferHandler,
 		editOffer: editOfferHandler,
+		deleteOffer: deleteOfferHandler,
+		filterOffers: filterOffersHandler,
+		filterValue,
+		setFilterValue: setFilterValueHandler,
 	};
 
 	return (
