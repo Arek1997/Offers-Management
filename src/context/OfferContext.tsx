@@ -1,5 +1,7 @@
 import { useState, createContext } from 'react';
 
+import { useLocalStorage } from '@mantine/hooks';
+
 import { OfferInterface } from '../interface/OfferInterface';
 
 const defaultValue: defaultValueInterface = {
@@ -48,7 +50,10 @@ interface OfferContextProviderProps {
 }
 
 const OfferContextProvider: React.FC<OfferContextProviderProps> = (props) => {
-	const [offersArr, setOffersArr] = useState(defaultValue.offersArr);
+	const [offersArr, setOffersArr] = useLocalStorage({
+		key: 'offers',
+		defaultValue: defaultValue.offersArr,
+	});
 	const [filterValue, setFilterValue] = useState(defaultValue.filterValue);
 
 	const setFilterValueHandler = (value: string) => setFilterValue(value);

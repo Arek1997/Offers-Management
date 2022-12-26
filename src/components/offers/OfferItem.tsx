@@ -31,7 +31,8 @@ const OfferItem: React.FC<OfferInterface> = (props) => {
 	const showAllTextHandler = () => toggle();
 
 	const deleteOfferHandler = () => {
-		confirmCtx.toggleModal();
+		// confirmCtx.toggleModal();
+		offerCtx.deleteOffer(props.id!);
 	};
 
 	const itemData: OfferInterface = {
