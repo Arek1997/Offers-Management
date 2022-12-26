@@ -1,6 +1,8 @@
 import { useContext, useEffect } from 'react';
+
 import { useForm } from '@mantine/form';
-import { Modal, Button, TextInput, Textarea } from '@mantine/core';
+import { Modal, Group, Button, TextInput, Textarea } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
 
 import { ModalContext } from '../../context/ModalContext';
 import { OfferContext } from '../../context/OfferContext';
@@ -35,11 +37,20 @@ const ModalForm: React.FC = () => {
 	const onSubmitHandler = (offer: OfferInterface) => {
 		if (modalCtx.edit) {
 			offerCtx.editOffer(modalCtx.editableItem.id!, offer);
+			showNotification({
+				title: 'Offer edited',
+				message: 'Your offer has been successfully edited!',
+				autoClose: false,
+			});
 		} else {
 			offerCtx.addOffer(offer);
+			showNotification({
+				title: 'Offer added',
+				message: 'New offer has been successfully added!',
+				autoClose: false,
+			});
 		}
 
-		form.reset();
 		modalCtx.toggleModal(false);
 	};
 
@@ -76,9 +87,19 @@ const ModalForm: React.FC = () => {
 							{...form.getInputProps('text')}
 						/>
 
-						<Button type='submit' className='block ml-auto bg-indigo-400'>
-							{modalCtx.edit ? 'Apply changes' : 'Add'}
-						</Button>
+						<Group position='right'>
+							<Button
+								type='button'
+								className='bg-gray-400 hover:bg-gray-500'
+								onClick={modalCtx.toggleModal.bind(null, false, undefined)}
+							>
+								Cancel
+							</Button>
+
+							<Button type='submit' className='bg-indigo-400'>
+								{modalCtx.edit ? 'Apply changes' : 'Add'}
+							</Button>
+						</Group>
 					</form>
 				</div>
 			</Modal>

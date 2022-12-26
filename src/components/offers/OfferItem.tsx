@@ -13,6 +13,8 @@ import {
 
 import { useToggle } from '@mantine/hooks';
 
+import { showNotification } from '@mantine/notifications';
+
 import { IconCopy, IconCheck, IconSettings, IconTrash } from '@tabler/icons';
 
 import { OfferInterface } from '../../interface/OfferInterface';
@@ -33,6 +35,12 @@ const OfferItem: React.FC<OfferInterface> = (props) => {
 	const deleteOfferHandler = () => {
 		// confirmCtx.toggleModal();
 		offerCtx.deleteOffer(props.id!);
+		showNotification({
+			title: 'Offer deleted',
+			message: 'Your offer has been successfully deleted!',
+			color: 'red',
+			autoClose: false,
+		});
 	};
 
 	const itemData: OfferInterface = {
