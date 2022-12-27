@@ -21,26 +21,33 @@ import { OfferInterface } from '../../interface/OfferInterface';
 
 import { ModalContext } from '../../context/ModalContext';
 import { OfferContext } from '../../context/OfferContext';
-import { ConfirmContext } from '../../context/ConfirmContext';
+import { useConfirmModal } from '../../context/ConfirmContext';
 
 const OfferItem: React.FC<OfferInterface> = (props) => {
 	const modalCtx = useContext(ModalContext);
 	const offerCtx = useContext(OfferContext);
-	const confirmCtx = useContext(ConfirmContext);
+
+	const handleShow = useConfirmModal();
 
 	const [value, toggle] = useToggle([5, 0] as const);
 
 	const showAllTextHandler = () => toggle();
 
-	const deleteOfferHandler = () => {
-		// confirmCtx.toggleModal();
-		offerCtx.deleteOffer(props.id!);
-		showNotification({
-			title: 'Offer deleted',
-			message: 'Your offer has been successfully deleted!',
-			color: 'red',
-			autoClose: false,
+	const deleteOfferHandler = async () => {
+		const choice = await handleShow.showConfirmation({
+			title: 'Delete offer',
+			text: 'Are you sure you want to delete this offer?',
+			confirmButtonText: 'Delete',
 		});
+
+		if (choice) {
+			offerCtx.deleteOffer(props.id!);
+			showNotification({
+				title: 'Deleted',
+				message: 'Your offer has been successfully deleted!',
+				color: 'red',
+			});
+		}
 	};
 
 	const itemData: OfferInterface = {
@@ -89,7 +96,7 @@ const OfferItem: React.FC<OfferInterface> = (props) => {
 						<Tooltip
 							label={copied ? 'Text copied' : 'Copy text'}
 							withArrow
-							position='right'
+							position='bottom'
 						>
 							<ActionIcon color={copied ? 'teal' : 'gray'} onClick={copy}>
 								{copied ? <IconCheck size={16} /> : <IconCopy size={16} />}

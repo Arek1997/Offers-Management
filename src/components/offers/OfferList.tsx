@@ -28,7 +28,7 @@ const OfferList: React.FC = () => {
 
 	return (
 		<section className='offers py-16'>
-			<div className='container md:px-8 flex gap-8 flex-wrap justify-center sm:justify-start items-center'>
+			<div className='container md:px-8 flex gap-8 flex-wrap justify-center sm:justify-start items-start'>
 				{content}
 			</div>
 		</section>

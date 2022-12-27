@@ -1,31 +1,39 @@
-import { useContext } from 'react';
-
 import { Modal, Button, Group, Text } from '@mantine/core';
 
-import { ConfirmContext } from '../../context/ConfirmContext';
+import { ConfirmInterface } from '../../interface/ConfirmInterface';
 
-const ConfirmModal: React.FC = () => {
-	const confirmCtx = useContext(ConfirmContext);
+interface ConfirmModalProps extends ConfirmInterface {
+	onClose: () => void;
+	onConfirm: () => void;
+}
 
+const ConfirmModal: React.FC<ConfirmModalProps> = ({
+	isOpen,
+	title,
+	text,
+	confirmButtonText,
+	onClose,
+	onConfirm,
+}) => {
 	return (
 		<>
 			<Modal
-				opened={confirmCtx.opened}
-				onClose={confirmCtx.toggleModal}
+				opened={isOpen!}
+				onClose={onClose}
 				size='auto'
-				title='Delete Offer'
+				title={title}
 				overlayBlur={2}
 				transition='fade'
 				transitionDuration={500}
 			>
-				<Text>Are you sure you want to delete this offer?</Text>
+				<Text>{text}</Text>
 
 				<Group mt='xl' position='apart'>
-					<Button variant='outline' onClick={confirmCtx.toggleModal}>
+					<Button variant='outline' onClick={onClose}>
 						Cancel
 					</Button>
-					<Button variant='outline' color='red'>
-						Delete offer
+					<Button variant='outline' color='red' onClick={onConfirm}>
+						{confirmButtonText}
 					</Button>
 				</Group>
 			</Modal>

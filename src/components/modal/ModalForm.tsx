@@ -38,16 +38,14 @@ const ModalForm: React.FC = () => {
 		if (modalCtx.edit) {
 			offerCtx.editOffer(modalCtx.editableItem.id!, offer);
 			showNotification({
-				title: 'Offer edited',
+				title: 'Edited',
 				message: 'Your offer has been successfully edited!',
-				autoClose: false,
 			});
 		} else {
 			offerCtx.addOffer(offer);
 			showNotification({
-				title: 'Offer added',
+				title: 'Added',
 				message: 'New offer has been successfully added!',
-				autoClose: false,
 			});
 		}
 
