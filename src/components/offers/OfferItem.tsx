@@ -34,11 +34,13 @@ const OfferItem: React.FC<OfferInterface> = (props) => {
 	const showAllTextHandler = () => toggle();
 
 	const deleteOfferHandler = async () => {
-		const choice = await handleShow.showConfirmation({
+		const choice = await handleShow({
 			title: 'Delete offer',
 			text: 'Are you sure you want to delete this offer?',
 			confirmButtonText: 'Delete',
 		});
+
+		console.log('ide dalej');
 
 		if (choice) {
 			offerCtx.deleteOffer(props.id!);
