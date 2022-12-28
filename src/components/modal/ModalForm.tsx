@@ -4,17 +4,31 @@ import { useForm } from '@mantine/form';
 import { Modal, Group, Button, TextInput, Textarea } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 
-import { ModalContext } from '../../context/ModalContext';
 import { OfferContext } from '../../context/OfferContext';
 import { OfferInterface } from '../../interface/OfferInterface';
 
-const ModalForm: React.FC = () => {
-	const modalCtx = useContext(ModalContext);
+interface Props {
+	isOpen: boolean;
+	edit?: boolean;
+	editItemId?: string;
+	title?: string;
+	text?: string;
+	onClose: () => void;
+}
+
+const ModalForm = ({
+	isOpen,
+	edit,
+	editItemId,
+	title,
+	text,
+	onClose,
+}: Props) => {
 	const offerCtx = useContext(OfferContext);
 
 	const initialValues = {
-		title: modalCtx.edit ? modalCtx.editableItem.title : '',
-		text: modalCtx.edit ? modalCtx.editableItem.text : '',
+		title: title ? title : '',
+		text: text ? text : '',
 	};
 
 	const form = useForm({
@@ -32,11 +46,11 @@ const ModalForm: React.FC = () => {
 	useEffect(() => {
 		form.clearErrors();
 		form.reset();
-	}, [modalCtx.opened]);
+	}, [isOpen]);
 
 	const onSubmitHandler = (offer: OfferInterface) => {
-		if (modalCtx.edit) {
-			offerCtx.editOffer(modalCtx.editableItem.id!, offer);
+		if (edit) {
+			offerCtx.editOffer(editItemId!, offer);
 			showNotification({
 				title: 'Edited',
 				message: 'Your offer has been successfully edited!',
@@ -49,16 +63,16 @@ const ModalForm: React.FC = () => {
 			});
 		}
 
-		modalCtx.toggleModal(false);
+		onClose();
 	};
 
 	return (
 		<>
 			<Modal
 				size='lg'
-				opened={modalCtx.opened}
-				onClose={modalCtx.toggleModal.bind(null, false)}
-				title={modalCtx.edit ? 'Edit your offer' : 'Add your new offer'}
+				opened={isOpen}
+				onClose={onClose}
+				title={edit ? 'Edit your offer' : 'Add your new offer'}
 				overlayBlur={2}
 				transition='fade'
 				transitionDuration={500}
@@ -67,18 +81,14 @@ const ModalForm: React.FC = () => {
 					<form onSubmit={form.onSubmit((values) => onSubmitHandler(values))}>
 						<TextInput
 							label='Offer title'
-							placeholder={
-								modalCtx.edit ? 'Edit offer title' : 'Enter offer title'
-							}
+							placeholder={edit ? 'Edit offer title' : 'Enter offer title'}
 							className='mb-5'
 							{...form.getInputProps('title')}
 						/>
 
 						<Textarea
 							label='Offer message'
-							placeholder={
-								modalCtx.edit ? 'Edit offer message' : 'Enter offer message'
-							}
+							placeholder={edit ? 'Edit offer message' : 'Enter offer message'}
 							autosize
 							minRows={2}
 							className='mb-5'
@@ -89,13 +99,13 @@ const ModalForm: React.FC = () => {
 							<Button
 								type='button'
 								className='bg-gray-400 hover:bg-gray-500'
-								onClick={modalCtx.toggleModal.bind(null, false, undefined)}
+								onClick={onClose}
 							>
 								Cancel
 							</Button>
 
 							<Button type='submit' className='bg-indigo-400'>
-								{modalCtx.edit ? 'Apply changes' : 'Add'}
+								{edit ? 'Apply changes' : 'Add'}
 							</Button>
 						</Group>
 					</form>

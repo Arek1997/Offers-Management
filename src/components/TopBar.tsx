@@ -9,20 +9,24 @@ import {
 import { useLocalStorage, useDebouncedState } from '@mantine/hooks';
 import { IconSun, IconMoon } from '@tabler/icons';
 
-import { ModalContext } from '../context/ModalContext';
 import { OfferContext } from '../context/OfferContext';
+
+import { useModal } from '../context/ModalContext';
 
 const TopBar: React.FC = () => {
 	const [darkMode, setDarkMode] = useLocalStorage({
 		key: 'dark-mode',
 		defaultValue: 'dark',
 	});
-	const modalCtx = useContext(ModalContext);
 	const offerCtx = useContext(OfferContext);
 
-	const [value, setValue] = useDebouncedState(offerCtx.filterValue, 200);
+	const [value, setValue] = useDebouncedState('', 200);
 
 	const theme = useMantineTheme();
+
+	const showModal = useModal();
+
+	const openModalHandler = () => showModal();
 
 	useEffect(() => {
 		if (darkMode === 'dark') {
@@ -32,9 +36,8 @@ const TopBar: React.FC = () => {
 		}
 	}, [darkMode]);
 
-	const filterOffersHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const filterOffersHandler = (e: React.ChangeEvent<HTMLInputElement>) =>
 		setValue(e.currentTarget.value);
-	};
 
 	useEffect(() => {
 		offerCtx.setFilterValue(value);
@@ -54,7 +57,7 @@ const TopBar: React.FC = () => {
 					color='indigo'
 					uppercase
 					className='bg-indigo-500'
-					onClick={modalCtx.toggleModal.bind(null, false, undefined)}
+					onClick={openModalHandler}
 				>
 					Add new offer
 				</Button>

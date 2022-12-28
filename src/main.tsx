@@ -12,13 +12,13 @@ import ConfirmContextProvider from './context/ConfirmContext';
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
 		<NotificationsProvider>
-			<ModalContextProvider>
-				<OfferContextProvider>
+			<OfferContextProvider>
+				<ModalContextProvider>
 					<ConfirmContextProvider>
 						<App />
 					</ConfirmContextProvider>
-				</OfferContextProvider>
-			</ModalContextProvider>
+				</ModalContextProvider>
+			</OfferContextProvider>
 		</NotificationsProvider>
 	</React.StrictMode>
 );

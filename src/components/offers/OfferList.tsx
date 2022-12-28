@@ -9,7 +9,7 @@ let content: OfferInterface[] | ReactNode;
 const OfferList: React.FC = () => {
 	const offerCtx = useContext(OfferContext);
 
-	const filteredArr = offerCtx.filterOffers(offerCtx.offersArr);
+	const filteredArr = offerCtx.filterOffers();
 
 	if (filteredArr.length > 0) {
 		content = filteredArr.map((offer) => (

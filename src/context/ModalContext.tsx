@@ -1,71 +1,41 @@
-import { useState, createContext } from 'react';
+import { useState, useContext, createContext } from 'react';
 
-import { OfferInterface } from '../interface/OfferInterface';
+import ModalForm from '../components/modal/ModalForm';
 
-const defaultValue: defaultValueInterface = {
-	opened: false,
-	edit: false,
-	editableItem: {
-		id: '',
-		title: '',
-		text: '',
-	},
-	toggleModal: () => {},
-};
+import { ModalInterface } from '../interface/ModalInterface';
 
-export const ModalContext = createContext(defaultValue);
-
-type toggleModalFunction = (
-	isEdit: boolean,
-	dataToEdit?: OfferInterface
-) => void;
-
-interface defaultValueInterface {
-	opened: boolean;
-	edit: boolean;
-	editableItem: OfferInterface;
-	toggleModal: toggleModalFunction;
-}
+type ModalContextType = (data?: ModalInterface) => void;
 
 interface ModalContextProviderProps {
 	children: React.ReactNode;
 }
 
+interface modalStateProps extends ModalInterface {
+	isOpen: boolean;
+}
+
+const ModalContext = createContext<ModalContextType>({} as ModalContextType);
+
 const ModalContextProvider: React.FC<ModalContextProviderProps> = (props) => {
-	const [opened, setOpened] = useState(defaultValue.opened);
-	const [edit, setEdit] = useState(defaultValue.edit);
-	const [editableItem, setEditableItem] = useState<OfferInterface>(
-		defaultValue.editableItem
-	);
+	const [modalState, setModalState] = useState<modalStateProps>({
+		isOpen: false,
+	});
 
-	const toggleModal: toggleModalFunction = (isEdit, dataToEdit) => {
-		setOpened(!opened);
-		setEdit(isEdit);
+	const handleModal: ModalContextType = (data) =>
+		setModalState({ ...data, isOpen: true });
 
-		if (isEdit) {
-			setEditableItem((prevState) => {
-				return {
-					...prevState,
-					id: dataToEdit!.id,
-					title: dataToEdit!.title,
-					text: dataToEdit!.text,
-				};
-			});
-		}
-	};
+	const closeModal = () => setModalState({ isOpen: false });
 
-	const providerValue = {
-		opened,
-		edit,
-		editableItem,
-		toggleModal,
-	};
+	const providerValue = handleModal;
 
 	return (
 		<ModalContext.Provider value={providerValue}>
 			{props.children}
+			{modalState.isOpen && <ModalForm {...modalState} onClose={closeModal} />}
 		</ModalContext.Provider>
 	);
 };
+
+export const useModal = () => useContext(ModalContext);
 
 export default ModalContextProvider;

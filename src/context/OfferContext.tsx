@@ -28,7 +28,7 @@ const defaultValue: defaultValueInterface = {
 	addOffer: (newOffer: OfferInterface) => {},
 	editOffer: (id: string, data: OfferInterface) => {},
 	deleteOffer: (id: string) => {},
-	filterOffers: (dataToFilter: OfferInterface[]) => [],
+	filterOffers: () => [],
 	filterValue: '',
 	setFilterValue: (value: string) => {},
 };
@@ -40,7 +40,7 @@ interface defaultValueInterface {
 	addOffer: (newOffer: OfferInterface) => void;
 	editOffer: (id: string, data: OfferInterface) => void;
 	deleteOffer: (id: string) => void;
-	filterOffers: (dataToFilter: OfferInterface[]) => OfferInterface[];
+	filterOffers: () => OfferInterface[];
 	filterValue: string;
 	setFilterValue: (value: string) => void;
 }
@@ -54,6 +54,7 @@ const OfferContextProvider: React.FC<OfferContextProviderProps> = (props) => {
 		key: 'offers',
 		defaultValue: defaultValue.offersArr,
 	});
+
 	const [filterValue, setFilterValue] = useState(defaultValue.filterValue);
 
 	const setFilterValueHandler = (value: string) => setFilterValue(value);
@@ -82,9 +83,9 @@ const OfferContextProvider: React.FC<OfferContextProviderProps> = (props) => {
 		setOffersArr(updatedState);
 	};
 
-	const filterOffersHandler = (dataToFilter: OfferInterface[]) =>
-		dataToFilter.filter((data) =>
-			data.title?.toLocaleLowerCase().includes(filterValue.toLocaleLowerCase())
+	const filterOffersHandler = () =>
+		offersArr.filter((data) =>
+			data.title!.toLocaleLowerCase().includes(filterValue.toLocaleLowerCase())
 		);
 
 	const providerValue = {

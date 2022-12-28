@@ -2,40 +2,42 @@ import { useState, useContext, createContext, useRef } from 'react';
 import { ConfirmInterface } from '../interface/ConfirmInterface';
 import ConfirmModal from '../components/modal/ConfirmModal';
 
-type ModalContextType = (data: ConfirmInterface) => Promise<boolean>;
+type ConfirmModalContextType = (data: ConfirmInterface) => Promise<boolean>;
 
 interface ModalContextProviderProps {
 	children: React.ReactNode;
 }
 
-const ConfirmContext = createContext<ModalContextType>({} as ModalContextType);
+const ConfirmContext = createContext<ConfirmModalContextType>(
+	{} as ConfirmModalContextType
+);
 
 const ConfirmContextProvider: React.FC<ModalContextProviderProps> = (props) => {
 	const [state, setState] = useState<ConfirmInterface>({ isOpen: false });
 
-	const funcRef = useRef<Function>();
+	const functionRef = useRef<Function>();
 
 	const handleShow = (data: ConfirmInterface): Promise<boolean> => {
 		setState({ ...data, isOpen: true });
-		return new Promise((resolve) => (funcRef.current = resolve));
+		return new Promise((resolve) => (functionRef.current = resolve));
 	};
 
 	const hide = () => setState({ isOpen: false });
 
 	const handleConfirm = () => {
-		funcRef.current && funcRef.current(true);
+		functionRef.current && functionRef.current(true);
 		hide();
 	};
 
 	const handleClose = () => {
-		funcRef.current && funcRef.current(false);
+		functionRef.current && functionRef.current(false);
 		hide();
 	};
 
-	const value: ModalContextType = handleShow;
+	const providerValue: ConfirmModalContextType = handleShow;
 
 	return (
-		<ConfirmContext.Provider value={value}>
+		<ConfirmContext.Provider value={providerValue}>
 			{props.children}
 
 			<ConfirmModal
@@ -47,7 +49,7 @@ const ConfirmContextProvider: React.FC<ModalContextProviderProps> = (props) => {
 	);
 };
 
-export const useConfirmModal = (): ModalContextType =>
+export const useConfirmModal = (): ConfirmModalContextType =>
 	useContext(ConfirmContext);
 
 export default ConfirmContextProvider;

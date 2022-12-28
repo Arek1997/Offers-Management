@@ -19,13 +19,14 @@ import { IconCopy, IconCheck, IconSettings, IconTrash } from '@tabler/icons';
 
 import { OfferInterface } from '../../interface/OfferInterface';
 
-import { ModalContext } from '../../context/ModalContext';
 import { OfferContext } from '../../context/OfferContext';
 import { useConfirmModal } from '../../context/ConfirmContext';
 
+import { useModal } from '../../context/ModalContext';
+
 const OfferItem: React.FC<OfferInterface> = (props) => {
-	const modalCtx = useContext(ModalContext);
 	const offerCtx = useContext(OfferContext);
+	const showModal = useModal();
 
 	const handleShow = useConfirmModal();
 
@@ -33,14 +34,20 @@ const OfferItem: React.FC<OfferInterface> = (props) => {
 
 	const showAllTextHandler = () => toggle();
 
+	const editOfferHandler = () =>
+		showModal({
+			title: props.title,
+			text: props.text,
+			edit: true,
+			editItemId: props.id,
+		});
+
 	const deleteOfferHandler = async () => {
 		const choice = await handleShow({
 			title: 'Delete offer',
 			text: 'Are you sure you want to delete this offer?',
 			confirmButtonText: 'Delete',
 		});
-
-		console.log('ide dalej');
 
 		if (choice) {
 			offerCtx.deleteOffer(props.id!);
@@ -50,12 +57,6 @@ const OfferItem: React.FC<OfferInterface> = (props) => {
 				color: 'red',
 			});
 		}
-	};
-
-	const itemData: OfferInterface = {
-		id: props.id,
-		title: props.title,
-		text: props.text,
 	};
 
 	return (
@@ -76,7 +77,7 @@ const OfferItem: React.FC<OfferInterface> = (props) => {
 					<Menu.Dropdown>
 						<Menu.Item
 							icon={<IconSettings size={14} />}
-							onClick={modalCtx.toggleModal.bind(null, true, itemData)}
+							onClick={editOfferHandler}
 						>
 							Edit
 						</Menu.Item>
