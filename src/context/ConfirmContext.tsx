@@ -19,19 +19,13 @@ const ConfirmContextProvider: React.FC<ModalContextProviderProps> = (props) => {
 
 	const handleShow = (data: ConfirmInterface): Promise<boolean> => {
 		setState({ ...data, isOpen: true });
-		return new Promise((resolve) => (functionRef.current = resolve));
-	};
 
-	const hide = () => setState({ isOpen: false });
-
-	const handleConfirm = () => {
-		functionRef.current && functionRef.current(true);
-		hide();
-	};
-
-	const handleClose = () => {
-		functionRef.current && functionRef.current(false);
-		hide();
+		return new Promise((resolve) => {
+			functionRef.current = (choice: boolean) => {
+				resolve(choice);
+				setState({ isOpen: false });
+			};
+		});
 	};
 
 	const providerValue: ConfirmModalContextType = handleShow;
@@ -42,8 +36,8 @@ const ConfirmContextProvider: React.FC<ModalContextProviderProps> = (props) => {
 
 			<ConfirmModal
 				{...state}
-				onClose={handleClose}
-				onConfirm={handleConfirm}
+				onClose={() => functionRef.current!(false)}
+				onConfirm={() => functionRef.current!(true)}
 			/>
 		</ConfirmContext.Provider>
 	);
