@@ -30,7 +30,7 @@ App contains also theme adjusment
 </p>
 
 <p>
-  <a href="https://ibb.co/9Hs9gh8"><img src="https://i.ibb.co/YBp7QXR/options.png" alt="options" border="0"></a>
+  <a href="https://ibb.co/m59JWp2"><img src="https://i.ibb.co/s9KjY7N/options.png" alt="options" border="0"></a>
 </p>
 
 <p>
