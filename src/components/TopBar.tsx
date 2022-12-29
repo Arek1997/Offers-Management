@@ -44,8 +44,8 @@ const TopBar: React.FC = () => {
 	}, [value]);
 
 	return (
-		<div className='container md:px-8 pt-6 2xl:pt-10 flex flex-col sm:flex-row justify-between'>
-			<div className='search-input mb-4 sm:mb-0 grow sm:max-w-[300px]'>
+		<div className='container flex flex-col justify-between pt-6 sm:flex-row md:px-8 2xl:pt-10'>
+			<div className='search-input mb-4 grow sm:mb-0 sm:max-w-[300px]'>
 				<TextInput
 					type='search'
 					placeholder='Enter search offer'
@@ -56,7 +56,7 @@ const TopBar: React.FC = () => {
 				<Button
 					color='indigo'
 					uppercase
-					className='bg-indigo-500'
+					className='border-2 border-slate-200 bg-slate-200 text-slate-800 hover:border-slate-100 hover:bg-slate-100 dark:border-indigo-500 dark:bg-indigo-500 dark:text-slate-100 dark:hover:border-indigo-600 dark:hover:bg-indigo-600'
 					onClick={openModalHandler}
 				>
 					Add new offer

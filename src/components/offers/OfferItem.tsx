@@ -66,12 +66,14 @@ const OfferItem: React.FC<OfferInterface> = (props) => {
 			radius='md'
 			withBorder
 			id={props.id}
-			className='min-w-full min-h-[235px] sm:min-w-[auto] sm:w-[320px] overflow-auto bg-transparent dark:bg-indigo-200 border-transparent  dark:border-indigo-200'
+			className='min-h-[235px] min-w-full overflow-auto border-transparent bg-slate-50 dark:border-indigo-200 dark:bg-indigo-200 sm:w-[320px]  sm:min-w-[auto]'
 		>
 			<Group position='right' className='mb-3'>
 				<Menu shadow='md' width={200}>
 					<Menu.Target>
-						<Button className='bg-indigo-500'>Options</Button>
+						<Button className='border-2 border-slate-300 bg-slate-300 text-slate-800 hover:border-slate-200 hover:bg-slate-200 dark:border-indigo-500 dark:bg-indigo-500 dark:text-slate-100 dark:hover:border-indigo-600 dark:hover:bg-indigo-600'>
+							Options
+						</Button>
 					</Menu.Target>
 
 					<Menu.Dropdown>
@@ -108,7 +110,12 @@ const OfferItem: React.FC<OfferInterface> = (props) => {
 					)}
 				</CopyButton>
 			</Group>
-			<Text weight={500} className='mb-3'>
+			<Text
+				weight={500}
+				lineClamp={value}
+				className='mb-3 break-words'
+				onClick={showAllTextHandler}
+			>
 				{props.title}
 			</Text>
 
@@ -116,7 +123,7 @@ const OfferItem: React.FC<OfferInterface> = (props) => {
 				size='sm'
 				color='dimmed'
 				lineClamp={value}
-				className='text-slate-800 cursor-pointer break-words'
+				className='cursor-pointer break-words text-slate-800'
 				onClick={showAllTextHandler}
 			>
 				{props.text}

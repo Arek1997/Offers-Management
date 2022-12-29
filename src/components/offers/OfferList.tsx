@@ -22,13 +22,15 @@ const OfferList: React.FC = () => {
 		));
 	} else {
 		content = (
-			<p className='text-slate-50 text-xl text-center grow'>No offers found</p>
+			<p className='grow text-center text-xl font-semibold  text-stone-700 dark:text-slate-50'>
+				No offers found
+			</p>
 		);
 	}
 
 	return (
 		<section className='offers py-16'>
-			<div className='container md:px-8 flex gap-8 flex-wrap justify-center sm:justify-start items-start'>
+			<div className='container flex flex-wrap items-start justify-center gap-8 sm:justify-start md:px-8'>
 				{content}
 			</div>
 		</section>

@@ -98,13 +98,14 @@ const ModalForm = ({
 						<Group position='right'>
 							<Button
 								type='button'
-								className='bg-gray-400 hover:bg-gray-500'
+								variant='outline'
+								color='gray'
 								onClick={onClose}
 							>
 								Cancel
 							</Button>
 
-							<Button type='submit' className='bg-indigo-400'>
+							<Button type='submit' variant='outline'>
 								{edit ? 'Apply changes' : 'Add'}
 							</Button>
 						</Group>
