@@ -10,9 +10,7 @@ import {
 	Menu,
 	Button,
 } from '@mantine/core';
-
 import { useToggle } from '@mantine/hooks';
-
 import { showNotification } from '@mantine/notifications';
 
 import { IconCopy, IconCheck, IconSettings, IconTrash } from '@tabler/icons';
@@ -21,16 +19,15 @@ import { OfferInterface } from '../../interface/OfferInterface';
 
 import { OfferContext } from '../../context/OfferContext';
 import { useConfirmModal } from '../../context/ConfirmContext';
-
 import { useModal } from '../../context/ModalContext';
+import ReadMoreReadLess from '../ReadMoreReadLess';
 
 const OfferItem: React.FC<OfferInterface> = (props) => {
-	const offerCtx = useContext(OfferContext);
-	const showModal = useModal();
-
-	const handleShow = useConfirmModal();
-
 	const [value, toggle] = useToggle([5, 0] as const);
+	const offerCtx = useContext(OfferContext);
+
+	const showModal = useModal();
+	const handleShow = useConfirmModal();
 
 	const showAllTextHandler = () => toggle();
 
@@ -113,21 +110,18 @@ const OfferItem: React.FC<OfferInterface> = (props) => {
 			<Text
 				weight={500}
 				lineClamp={value}
-				className='mb-3 break-words'
+				className='offer-title mb-3 break-words'
 				onClick={showAllTextHandler}
 			>
 				{props.title}
 			</Text>
 
-			<Text
-				size='sm'
-				color='dimmed'
-				lineClamp={value}
-				className='cursor-pointer break-words text-slate-800'
-				onClick={showAllTextHandler}
-			>
-				{props.text}
-			</Text>
+			<ReadMoreReadLess
+				id={props.id}
+				text={props.text}
+				value={value}
+				showAllTextHandler={showAllTextHandler}
+			/>
 		</Card>
 	);
 };
