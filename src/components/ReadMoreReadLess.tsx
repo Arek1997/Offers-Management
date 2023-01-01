@@ -15,25 +15,26 @@ const MAX_TEXT_HEIGHT = 110;
 
 interface Props extends OfferInterface {
 	children?: ReactNode;
-	showAllTextHandler: () => void;
 	value: number;
+	showAllTextHandler: () => void;
 }
 
 const ReadMoreReadLess: React.FC<Props> = (props) => {
-	const [textTooHigh, setTextTooHigh] = useState(false);
+	const [isTextTooHigh, setIsTextTooHigh] = useState(false);
 	const textRef = useRef<string>();
 
 	const offerCtx = useContext(OfferContext);
 
 	useEffect(() => {
 		if (props.text?.length !== textRef.current?.length) {
-			const offerText = document
+			const textContainer = document
 				.getElementById(`${props.id}`)
 				?.querySelector('.offer-text') as HTMLDivElement;
 
-			const offerTextHeight = offerText?.offsetHeight > MAX_TEXT_HEIGHT;
+			const isTextContainerTooHeight =
+				textContainer.scrollHeight > MAX_TEXT_HEIGHT;
 
-			setTextTooHigh(offerTextHeight);
+			setIsTextTooHigh(isTextContainerTooHeight);
 			textRef.current = props.text;
 		}
 	}, [offerCtx.offersArr]);
@@ -43,13 +44,13 @@ const ReadMoreReadLess: React.FC<Props> = (props) => {
 			<Text
 				size='sm'
 				color='dimmed'
-				lineClamp={textTooHigh ? props.value : 0}
+				lineClamp={isTextTooHigh ? props.value : 0}
 				className='offer-text break-words leading-[22px] text-slate-800'
 				onClick={props.showAllTextHandler}
 			>
 				{props.text}
 			</Text>
-			{textTooHigh && (
+			{isTextTooHigh && (
 				<Text
 					className='mt-2 inline-block cursor-pointer text-base hover:underline'
 					onClick={props.showAllTextHandler}
