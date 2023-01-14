@@ -30,7 +30,7 @@ const OfferList: React.FC = () => {
 
 	return (
 		<section className='offers py-16'>
-			<div className='container flex flex-wrap items-start justify-center gap-8 sm:justify-start md:px-8'>
+			<div className='animate container flex flex-wrap items-start justify-center gap-8 sm:justify-start md:px-8'>
 				{content}
 			</div>
 		</section>
